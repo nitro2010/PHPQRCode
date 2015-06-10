@@ -138,11 +138,43 @@ class QRcode {
     //----------------------------------------------------------------------
     public static function png($text, $outfile = false, $level = Constants::QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false)
     {
-        $enc = QRencode::factory($level, $size, $margin);
-        return $enc->encodePNG($text, $outfile, $saveandprint);
+        $image = self::image($text, $outfile, $level, $size, $margin);
+		
+		if ($image == null) {
+			return null;
+		}
+		
+        if ($outfile === false) {
+            Header("Content-type: image/png");
+            ImagePng($outfile);
+        } else {
+            if($saveandprint===TRUE){
+                ImagePng($image, $outfile);
+                header("Content-type: image/png");
+                ImagePng($image);
+            }else{
+                ImagePng($image, $outfile);
+            }
+        }
+
+        ImageDestroy($image);
     }
 
-    //----------------------------------------------------------------------
+	public static function jpg($text, $outfile = false, $level = Constants::QR_ECLEVEL_L, $size = 3, $margin = 4, $quality = 85)
+	{
+        $image = self::image($text, $outfile, $level, $size, $margin);
+		
+        if ($outfile === false) {
+            Header("Content-type: image/jpeg");
+            ImageJpeg($image, null, $quality);
+        } else {
+            ImageJpeg($image, $outfile, $quality);
+        }
+
+        ImageDestroy($image);
+	}
+
+	//----------------------------------------------------------------------
     public static function text($text, $outfile = false, $level = Constants::QR_ECLEVEL_L, $size = 3, $margin = 4)
     {
         $enc = QRencode::factory($level, $size, $margin);
@@ -154,5 +186,12 @@ class QRcode {
     {
         $enc = QRencode::factory($level, $size, $margin);
         return $enc->encodeRAW($text, $outfile);
+    }
+
+	//----------------------------------------------------------------------
+    public static function image($text, $outfile = false, $level = Constants::QR_ECLEVEL_L, $size = 3, $margin = 4)
+    {
+        $enc = QRencode::factory($level, $size, $margin);
+        return $enc->encodeImage($text, $outfile);
     }
 }

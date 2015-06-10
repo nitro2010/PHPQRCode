@@ -87,7 +87,8 @@ class QRtools {
             $frame = QRspec::newFrame($a);
             if (Constants::QR_IMAGE) {
                 $fileName = Constants::QR_CACHE_DIR.'frame_'.$a.'.png';
-                QRimage::png(self::binarize($frame), $fileName, 1, 0);
+                $image = QRimage::image(self::binarize($frame), $fileName, 1, 0);
+                ImagePng($image, $filename);
             }
 
             $width = count($frame);

@@ -21,7 +21,7 @@ Then run the command `composer update`.
 
 Sample code:
 
-    \PHPQRCode\QRcode::png("Test", "/tmp/qrcode.png", 'L', 4, 2);
+    \PHPQRCode\QRcode::png("Test", "/tmp/qrcode.png", Constants::QR_ECLEVEL_L, 4, 2);
 
 This code will generate a PNG file on '/tmp/qrcode.png' with a QRCode that contains the word 'Test'.
 
