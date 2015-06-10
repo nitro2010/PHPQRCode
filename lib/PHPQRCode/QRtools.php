@@ -26,6 +26,8 @@ namespace PHPQRCode;
 
 class QRtools {
 
+	protected static $qr_time_bench = array();
+	
     //----------------------------------------------------------------------
     public static function binarize($frame)
     {
@@ -131,10 +133,7 @@ class QRtools {
         list($usec, $sec) = explode(" ", microtime());
         $time = ((float)$usec + (float)$sec);
 
-        if (!isset($GLOBALS['qr_time_bench']))
-            $GLOBALS['qr_time_bench'] = array();
-
-        $GLOBALS['qr_time_bench'][$markerId] = $time;
+        QRtools::$qr_time_bench[$markerId] = $time;
     }
 
     //----------------------------------------------------------------------
@@ -150,7 +149,7 @@ class QRtools {
                 <thead><tr style="border-bottom:1px solid silver"><td colspan="2" style="text-align:center">BENCHMARK</td></tr></thead>
                 <tbody>';
 
-        foreach($GLOBALS['qr_time_bench'] as $markerId=>$thisTime) {
+        foreach(QRtools::$qr_time_bench as $markerId=>$thisTime) {
             if ($p > 0) {
                 echo '<tr><th style="text-align:right">till '.$markerId.': </th><td>'.number_format($thisTime-$lastTime, 6).'s</td></tr>';
             } else {
